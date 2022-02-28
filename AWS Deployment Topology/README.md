@@ -64,11 +64,11 @@ A Three-Tiered Application for hosting Static UI, backed Micro-Service and a Dat
 
 
 #### Amazon DocumentDB ( MangoDB)
--  `Security Groups to Allow from Backend VM’s 27017 `
+-  `Security Groups to Allow from Backend VM’s on Port 27017 `
 -  `Communication Protocol -> TCP / SSL`
 
 #### Amazon RDS ( For postGress)
-- `Security Groups to Allow TCP Traffic on Port from Backend VM’s`
+- `Security Groups to Allow TCP Traffic on Port from Backend VM’s on Port 5432`
 - `Communication Protocol -> TCP / SSL`
 
 
