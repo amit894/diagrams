@@ -54,7 +54,7 @@ A Three-Tiered Application for hosting Static UI, backed Micro-Service and a Dat
   - `Communication Protocol -> HTTPS`
   -  `SSL Optional`  
 
-### Backend VM's (L4)
+### Backend VM's 
 
   - `Security Groups to Allow from Internal Load Balancer on Port 80 `
   - `Communication Protocol -> HTTP`
