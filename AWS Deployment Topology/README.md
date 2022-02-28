@@ -24,7 +24,7 @@ A Three-Tiered Application for hosting Static UI, backed Micro-Service and a Dat
   - `Routing` : Intrenal to VPC through Route Table and a Internet Gateway for Public Traffic
 
 ### Application Subnet
-  - `Components` : Classic Load Balancer and NAT Gateway.
+  - `Components` : Classic Load Balancer.
   - `Routing` : Intrenal to VPC through Route Table.
 
 ### Database Subnet
