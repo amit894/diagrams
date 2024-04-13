@@ -1,0 +1,65 @@
+
+Traffic 
+
+100 M jobs in one day 
+
+
+100,000,000/24*60*60 = 1157 QPS
+
+One job takes about 5 minutes 
+16 core machine = 16 *2 32 threads
+
+32*60/(5*60*60) = 0.10 jobs per second
+Overall machines need 11,570 machines
+
+50 MB of data
+16 GB machine memory
+
+16*1000*60/50*5*60 = 64 jobs per second
+1157/64 = 20 machines 
+
+
+User Flow
+
+sumbitJob( user_id, job_id, job_type, execution_time, job_priority, result_location)
+listalljobs(user_id)
+view_job(user_id, job_id)
+
+Database Design
+
+
+1000 QPS ()
+No relations -> NoSQL [  DynamoDB] -> Read + Write heavy traffic 
+
+
+( user_id, job_id, job_type, scheduled_job_execution_time, job_priority, result_location, execution_status, current_retry, max_retry, job_interval)
+
+job_status -> Started, In Process, Completed
+execution_status -> NOT_STARTED, CLAIMED, PROCESSING, SUCCESS, RETRIABLE_FAILURE, FATAL_FAILURE
+
+Index - scheduled_job
+
+scheduled_job_execution_time
+job_id
+shard_id 
+
+User request Flow
+
+(1 & 2) User will submit/get the job by connecting with load balancer(or API Gateway)
+(3) Request will persist in the Database, and acknowledgment is sent back to user
+(4 & 5) Job Executor service will continuously poll the due jobs from the Database and keep entry in the queue
+(6 & 7) job executor service will execute the actual job business logic and update the final result into the file system and update the status as COMPLETED
+
+
+
+Job Scheduler
+
+* Every X minute, the master node creates an authoritative UNIX timestamp and assigns a shard_id and scheduled_job_execution_time to each worker.
+* Worker node will execute below query, and push jobs inside the Kafka queue for execution.
+
+Job Executor 
+
+* When a job is picked up from the queue, consumer’s master updates JOB db attribute execution_status=CLAIMED.
+* When worker process picks up the work, it updates execution_status=PROCESSING and continuously send health check to local DB.
+* Upon completion of a job, worker process will push the result inside s3, update JOB db execution_status=COMPLETED or FATAL_FAILED, and local db with the status
+* Both worker processes and master will update the health check inside the local database.
